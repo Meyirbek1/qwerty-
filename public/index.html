@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="kk" style="background:#000">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>aqiqat.ai — Жалған ақпаратты анықтау жүйесі</title>
+<style>html,body{background:#000000 !important;color:#ffffff}</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap">
+<style>
+:root{--bg:#000;--text:#fff;--muted:#9a9a9a;--stat:#d8d8d8;--border:rgba(255,255,255,.16);--logo:15.5px;--nav:14px;--nav-h:40px;--btn:13.5px;--btn-h:40px;--hero-btn-h:42px;--h1:48px;--lede:15.5px;--badge:12.5px;--stat-size:13.5px;--hx:40px;--sx:72px;--sy:36px;--gap:85px;--ok:#4ade80;--warn:#facc15;--bad:#f87171}
+@media(min-width:1600px){:root{--logo:17px;--nav:15px;--nav-h:44px;--btn:15px;--btn-h:44px;--hero-btn-h:48px;--h1:64px;--lede:18px;--hx:64px;--sx:96px}}
+@media(max-width:1279px){:root{--nav:13px;--nav-h:36px;--h1:42px;--hx:28px;--sx:36px;--gap:64px}}
+@media(max-width:900px){:root{--h1:36px;--lede:16.5px;--hx:16px;--sx:20px;--gap:36px}}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+html,body{background:#000000;background:var(--bg);color:#fff;font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+body{position:relative}a{color:inherit;text-decoration:none}button{font-family:inherit}
+#net{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:.5;pointer-events:none}
+.grain{position:fixed;inset:0;z-index:100;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-photo{position:absolute;inset:0 0 auto 0;height:100vh;height:100dvh;z-index:0;overflow:hidden}
+.hero-photo video{width:100%;height:100%;object-fit:cover;opacity:1}
+.hero-photo::after{content:"";position:absolute;inset:auto 0 0 0;height:30%;background:linear-gradient(transparent,#000)}
+/* header */
+.header{position:fixed;top:0;left:0;right:0;z-index:50;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:22px var(--hx) 10px;transition:background .3s,backdrop-filter .3s}
+.header.sc{background:rgba(0,0,0,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.logo{display:inline-flex;align-items:center;gap:9px;justify-self:start;font-size:var(--logo);font-weight:600;letter-spacing:-.03em}.logo svg{width:22px;height:22px}.logo-suffix{font-weight:400}
+nav{display:flex;align-items:center;gap:8px;justify-self:center}
+nav a,nav .ddb{font-family:inherit;cursor:pointer;position:relative;overflow:hidden;display:inline-flex;align-items:center;height:var(--nav-h);padding:0 18px;border-radius:7px;border:1px solid rgba(198,198,198,.55);background:linear-gradient(105deg,#050505 0%,#2a2a2a 48%,#4a4a4a 100%);color:#f3f3f3;font-size:var(--nav);letter-spacing:-.01em;white-space:nowrap;transition:background .35s,border-color .35s,box-shadow .35s}
+nav a::before,nav .ddb::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.16) 50%,transparent 70%);transform:translateX(-120%);transition:transform .6s ease}
+nav a:hover,nav .ddb:hover{border-color:rgba(235,235,235,.9);background:linear-gradient(105deg,#111,#3a3a3a 45%,#6a6a6a);box-shadow:0 0 18px rgba(200,210,230,.18)}nav a:hover::before,nav .ddb:hover::before{transform:translateX(120%)}
+.hr{justify-self:end;display:flex;gap:8px;align-items:center}
+.lang{height:var(--btn-h);padding:0 12px;border-radius:6px;border:1px solid rgba(198,198,198,.45);background:rgba(0,0,0,.4);color:#fff;font-size:var(--btn);cursor:pointer}
+.burger{display:none;width:42px;height:42px;border-radius:6px;border:1px solid var(--border);background:rgba(8,8,8,.55);place-content:center;gap:5px;cursor:pointer;z-index:60}
+.burger i{display:block;width:16px;height:1.5px;background:#fff;border-radius:1px;transition:.25s}
+body.menu-open .burger i:nth-child(1){transform:translateY(6.5px) rotate(45deg)}body.menu-open .burger i:nth-child(2){opacity:0}body.menu-open .burger i:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+/* buttons */
+.btn{position:relative;isolation:isolate;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;height:var(--btn-h);padding:0 16px;border-radius:6px;font-size:var(--btn);font-weight:500;letter-spacing:-.02em;line-height:1;white-space:nowrap;cursor:pointer;transition:background .35s,border-color .35s,box-shadow .35s,color .35s,filter .35s}
+.btn::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 20%,rgba(255,255,255,.45) 48%,transparent 76%);transform:translateX(-130%);transition:transform .65s ease}.btn:hover::after{transform:translateX(130%)}
+.btn-solid{background:linear-gradient(180deg,#fff 0%,#e7e7e7 48%,#cfcfcf 100%);color:#111;border:1px solid #fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.95)}
+.btn-solid:hover{background:linear-gradient(180deg,#fff,#f3f6ff 42%,#d5def2);border-color:#f2f6ff;box-shadow:inset 0 1px 0 #fff,0 0 22px rgba(186,208,255,.35),0 8px 18px rgba(255,255,255,.12)}
+.btn-solid:disabled{opacity:.6;cursor:wait}
+.btn-ghost{background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(0,0,0,.5) 46%,rgba(150,170,200,.1));color:#fff;border:1px solid rgba(198,198,198,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.btn-ghost:hover{border-color:rgba(220,230,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 0 24px rgba(170,200,255,.28)}
+.hb{height:var(--hero-btn-h);padding:0 18px}
+/* hero */
+.page{position:relative;z-index:1;display:grid;grid-template-rows:1fr auto;min-height:100vh;min-height:100dvh}
+.hero{display:flex;align-items:flex-end;justify-content:center;padding:96px 24px var(--gap)}
+.hero-copy{display:flex;flex-direction:column;align-items:center;text-align:center;max-width:900px;width:100%}
+.badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;padding:9px 15px;border-radius:5px;background:linear-gradient(90deg,#7d7d7d,#2a2a2a 52%,#0a0a0a);color:#f2f2f2;font-size:var(--badge);letter-spacing:-.01em}
+.badge svg{width:18px;height:20px;fill:#fff;filter:drop-shadow(0 0 3px rgba(255,255,255,.45))}
+h1{font-weight:500;letter-spacing:-.045em;line-height:1.12;font-size:var(--h1);display:flex;flex-direction:column;align-items:center}
+.hl{display:block;overflow:hidden;padding:.06em .15em .14em}
+h1 em,h2 em{font-family:"Instrument Serif","Times New Roman",Times,serif;font-style:italic;font-weight:400;font-size:1.08em;letter-spacing:-.03em;color:#9a9a9a}
+.lede{max-width:500px;margin-top:18px;color:#9a9a9a;font-size:var(--lede);line-height:1.55;letter-spacing:-.015em}
+.acts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
+.stats{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 var(--sx) max(var(--sy),env(safe-area-inset-bottom));color:var(--stat)}
+.stat{display:inline-flex;align-items:center;gap:14px;font-size:var(--stat-size);letter-spacing:-.015em;white-space:nowrap}.stat svg{width:20px;height:20px}.stat svg.w{width:38px;height:21px}
+/* entrance */
+.appear{animation-duration:1.05s;animation-fill-mode:both;animation-timing-function:cubic-bezier(.16,1,.3,1);animation-delay:var(--d,.08s)}
+.sc1{animation-name:in-scale}.sf{animation-name:in-soft}.sm{animation-name:in-mask}.sp{animation-name:in-pop}.sb{animation-name:in-btn}.ss{animation-name:in-side}.st{animation-name:in-stat}
+@keyframes in-scale{from{opacity:0;transform:scale(.84)}}@keyframes in-soft{from{opacity:0;transform:translateY(14px)}}@keyframes in-mask{from{opacity:0;transform:translateY(40%)}}
+@keyframes in-pop{0%{opacity:0;transform:scale(.9)}70%{transform:scale(1.03)}}@keyframes in-btn{from{opacity:0;transform:translateY(18px) scale(.94)}}@keyframes in-side{from{opacity:0;transform:translateX(22px)}}@keyframes in-stat{from{opacity:0;transform:translateY(20px)}}
+h1 em{animation:in-em 1.2s .72s both}@keyframes in-em{from{opacity:.35;filter:blur(4px)}}
+/* sections */
+section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:110px 24px 30px}
+.eyebrow{color:#9a9a9a;font-size:13px;letter-spacing:.02em;margin-bottom:12px}
+h2{font-weight:500;font-size:clamp(30px,4.4vw,44px);letter-spacing:-.04em;line-height:1.12;margin-bottom:14px}
+.sub{color:#9a9a9a;max-width:560px;line-height:1.55;margin-bottom:34px;letter-spacing:-.01em}
+.card{border:1px solid var(--border);border-radius:14px;background:rgba(10,10,10,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:22px}
+textarea{width:100%;min-height:170px;resize:vertical;background:#050505;color:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;font:inherit;font-size:15px;line-height:1.55;outline:none;transition:border-color .3s}
+textarea:focus{border-color:rgba(220,230,255,.6)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px}.row .ex{display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:#9a9a9a;font-size:13px}
+.chip{border:1px solid var(--border);background:transparent;color:#d8d8d8;border-radius:6px;padding:7px 11px;font-size:12.5px;cursor:pointer;transition:.25s}.chip:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.06)}
+#res{display:none;margin-top:18px}#res.on{display:block;animation:in-soft .6s both}
+.vhead{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.vb{font-size:22px;font-weight:600;letter-spacing:-.03em;display:flex;align-items:center;gap:10px}.dot{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 14px var(--c)}
+.reliable{--c:var(--ok)}.suspicious{--c:var(--warn)}.fake{--c:var(--bad)}
+.bar{height:8px;border-radius:5px;background:#1a1a1a;overflow:hidden;margin:14px 0 4px}.bar i{display:block;height:100%;width:0;background:var(--c);border-radius:5px;transition:width 1s cubic-bezier(.16,1,.3,1)}
+.small{color:#9a9a9a;font-size:13px}.rg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:18px}
+.rg h4{font-size:13px;font-weight:500;color:#9a9a9a;margin-bottom:8px;letter-spacing:.02em}.rg li{margin:0 0 7px 18px;line-height:1.5;font-size:14.5px;color:#e6e6e6}
+.tags{display:flex;flex-wrap:wrap;gap:7px}.tag{border:1px solid var(--c);color:var(--c);border-radius:5px;padding:5px 10px;font-size:12.5px}
+.hl-text{margin-top:18px;padding:14px;border-radius:10px;background:#050505;border:1px solid var(--border);line-height:1.65;font-size:14.5px;white-space:pre-wrap;color:#cfcfcf}
+mark{background:rgba(248,113,113,.22);color:#fff;border-bottom:2px solid var(--bad);border-radius:2px;padding:0 1px}
+.err{display:none;margin-top:12px;color:var(--bad);font-size:14px}.err.on{display:block}
+.steps,.feats{display:grid;gap:16px}.steps{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}.feats{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.num{font-family:"Instrument Serif",serif;font-style:italic;font-size:44px;color:#9a9a9a;line-height:1}
+.card h3{font-size:18px;font-weight:500;letter-spacing:-.03em;margin:12px 0 8px}.card p{color:#9a9a9a;font-size:14.5px;line-height:1.55}
+.rv{transition:opacity .8s,transform .8s}.js .rv{opacity:0;transform:translateY(18px)}.js .rv.in{opacity:1;transform:none}
+.hist li{list-style:none;display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);font-size:14px}.hist li:last-child{border:0}
+.hist .t{flex:1;color:#cfcfcf;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hist .m{color:#9a9a9a;font-size:12.5px}
+.sum{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:12px}.sum b{font-size:26px;font-weight:600;letter-spacing:-.03em;display:block}
+details{border-bottom:1px solid var(--border);padding:18px 2px}summary{cursor:pointer;font-size:17px;letter-spacing:-.02em;list-style:none;display:flex;justify-content:space-between;gap:14px}summary::after{content:"+";color:#9a9a9a;font-size:22px;line-height:1}details[open] summary::after{content:"–"}details p{color:#9a9a9a;line-height:1.6;margin-top:12px;max-width:760px;font-size:15px}
+footer{position:relative;z-index:1;max-width:1100px;margin:60px auto 0;padding:30px 24px calc(40px + env(safe-area-inset-bottom));color:#9a9a9a;font-size:13px;line-height:1.6;border-top:1px solid var(--border)}
+/* phone */
+.md{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.md[hidden]{display:none}
+.mc{width:100%;max-width:400px;position:relative;background:rgba(10,10,10,.92)}.mc .x{position:absolute;right:12px;top:8px;background:none;border:0;color:#9a9a9a;font-size:26px;cursor:pointer}
+.tabs{display:flex;gap:8px;margin:14px 0}.tabs .chip.on{background:#fff;color:#111;border-color:#fff}
+.mc input{width:100%;background:#050505;color:#fff;border:1px solid var(--border);border-radius:8px;padding:13px 14px;font:inherit;font-size:15px;margin-bottom:10px;outline:none}.mc input:focus{border-color:rgba(220,230,255,.6)}
+.lk{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;padding:12px 14px;border:1px dashed var(--border);border-radius:10px;color:#cfcfcf;font-size:14px}
+#home{position:relative}#view{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:130px 24px 40px;min-height:100vh;animation:in-soft .5s both}#view[hidden]{display:none}
+.dd{position:relative}.ddb .ar{margin-left:8px}.dd-menu{position:absolute;top:100%;left:0;padding-top:8px;min-width:250px;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
+.dd:hover .dd-menu,.dd:focus-within .dd-menu,.dd.open .dd-menu{opacity:1;visibility:visible}
+.ddi{display:flex;flex-direction:column;padding:6px;background:rgba(10,10,10,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:12px}
+nav .ddi a{height:auto;padding:11px 14px;border:0;background:transparent;border-radius:8px;justify-content:flex-start;box-shadow:none;color:#e6e6e6}nav .ddi a::before{display:none}nav .ddi a:hover,nav .ddi a.on{background:rgba(255,255,255,.1);box-shadow:none}
+a.card{display:block;transition:border-color .3s,transform .3s,opacity .8s}a.card:hover{border-color:rgba(255,255,255,.4);transform:translateY(-3px)}a.card h3::after{content:" →";color:#9a9a9a}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px 4px;border-bottom:1px solid var(--border);cursor:pointer;line-height:1.5}.opt input{margin-top:4px;width:18px;height:18px;accent-color:#fff}
+.srch{width:100%;max-width:420px;background:#050505;color:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font:inherit;margin-bottom:20px;outline:none}.srch:focus{border-color:rgba(220,230,255,.6)}
+.ex-b{margin-top:12px;padding:10px 12px;border-left:2px solid var(--border);color:#cfcfcf;font-size:13.5px;line-height:1.5}
+@media(max-width:900px){.dd{width:100%}.ddb{width:100%;height:48px;font-size:17px;justify-content:center;border-radius:10px}.dd-menu{position:static;opacity:1;visibility:visible;padding-top:8px}nav .ddi a{height:44px;font-size:16px;justify-content:center;padding:0}.burger{display:grid}.header{grid-template-columns:1fr auto auto}.hr .btn-solid{display:none}.logo,.hr,.burger{z-index:80;position:relative}
+nav{position:fixed;inset:0;z-index:45;flex-direction:column;justify-content:flex-start;overflow-y:auto;gap:12px;padding:96px 22px 32px;background:rgba(8,8,8,.42);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;visibility:hidden;transition:.28s}
+body.menu-open nav{opacity:1;visibility:visible}body.menu-open{overflow:hidden}nav a{width:100%;height:48px;font-size:17px;border-radius:10px;justify-content:center}
+.hero{padding:96px 20px 64px}.stats{flex-direction:column;gap:16px;padding-top:10px}.stat{white-space:normal}section{padding-top:80px}}
+@media(max-width:560px){.acts{flex-direction:column;width:100%}.acts .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body style="background:#000;color:#fff">
+<div class="grain"></div>
+<canvas id="net"></canvas>
+<header class="header" id="hd">
+ <a class="logo appear sc1" href="#top" style="--d:.08s" aria-label="aqiqat.ai"><svg viewBox="0 0 24 24" fill="currentColor"><g transform="rotate(-30 12 12)"><circle cx="7.3" cy="3.2" r="1.45"/><rect x="5.5" y="4.7" width="3.6" height="14.6" rx="1.8"/><rect x="14.9" y="4.7" width="3.6" height="14.6" rx="1.8"/><circle cx="16.7" cy="20.8" r="1.45"/></g></svg><span>aqiqat<span class="logo-suffix">.ai</span></span></a>
+ <nav id="nav" aria-label="Primary">
+  <a href="#analyze" class="appear sc1" style="--d:.16s" data-i="n1"></a><a href="#how" class="appear sf" style="--d:.28s" data-i="n2"></a><a href="#features" class="appear sc1" style="--d:.4s" data-i="n3"></a><a href="#faq" class="appear sf" style="--d:.52s" data-i="n4"></a>
+ <div class="dd appear sc1" id="dd" style="--d:.64s"><button class="ddb" id="ddb" aria-haspopup="true" aria-expanded="false"><span data-i="n5"></span><svg class="ar" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="currentColor" fill="none" stroke-width="1.5"/></svg></button><div class="dd-menu"><div class="ddi"><a href="#/quiz" data-i="p1"></a><a href="#/techniques" data-i="p2"></a><a href="#/checklist" data-i="p3"></a><a href="#/dashboard" data-i="p4"></a></div></div></div>
+ </nav>
+ <div class="hr appear sc1" style="--d:.34s"><span class="small" id="who" style="display:none"></span><button class="lang" id="login"></button><button class="lang" id="lang" aria-label="Language">RU</button><a class="btn btn-solid" href="#analyze" data-i="cta"></a></div>
+ <button class="burger" id="bg" aria-controls="nav" aria-expanded="false" aria-label="Open menu"><i></i><i></i><i></i></button>
+</header>
+<div id="home"><div class="hero-photo"><video id="hv" autoplay muted loop playsinline preload="auto"><source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260818_072341_50851634-bbc3-4c33-9acc-7647d4db44aa.mp4" type="video/mp4"></video></div>
+
+<div class="page" id="top">
+ <main class="hero"><div class="hero-copy">
+  <div class="badge appear sp" style="--d:.22s"><svg viewBox="0 0 24 24"><path d="M12 2.6C12.55 2.6 12.88 3.15 13.08 4.7c.62 4.7 1.52 5.6 6.22 6.22 1.55.2 2.1.53 2.1 1.08s-.55.88-2.1 1.08c-4.7.62-5.6 1.52-6.22 6.22-.2 1.55-.53 2.1-1.08 2.1s-.88-.55-1.08-2.1c-.62-4.7-1.52-5.6-6.22-6.22C3.15 12.88 2.6 12.55 2.6 12s.55-.88 2.1-1.08c4.7-.62 5.6-1.52 6.22-6.22C11.12 3.15 11.45 2.6 12 2.6Z"/></svg><span data-i="badge"></span></div>
+  <h1><span class="hl appear sm" style="--d:.42s" data-h="h1a"></span><span class="hl appear sm" style="--d:.62s" data-i="h1b"></span></h1>
+  <p class="lede appear sf" style="--d:.82s;animation-duration:1.25s" data-i="lede"></p>
+  <div class="acts"><a class="btn btn-solid hb appear sb" style="--d:.96s" href="#analyze" data-i="b1"></a><a class="btn btn-ghost hb appear ss" style="--d:1.1s" href="#how" data-i="b2"></a></div>
+ </div></main>
+ <footer class="stats" style="max-width:none;margin:0;border:0;padding-top:0">
+  <div class="stat appear st" style="--d:1.12s"><svg viewBox="0 0 24 24"><defs><linearGradient id="g1" x1="3" y1="2" x2="14" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity=".38"/><stop offset="1" stop-color="#3a3a3a" stop-opacity=".62"/></linearGradient><linearGradient id="g2" x1="3" y1="2" x2="14" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3a3a3a" stop-opacity=".38"/><stop offset="1" stop-color="#fff" stop-opacity=".62"/></linearGradient></defs><rect x="3.4" y="2.6" width="7.2" height="18.8" rx="3.6" fill="url(#g1)"/><rect x="13.4" y="2.6" width="7.2" height="18.8" rx="3.6" fill="url(#g2)"/><rect x="9.2" y="10.9" width="5.6" height="2.2" rx="1.1" fill="#4a4a4a"/></svg><span data-i="s1"></span></div>
+  <div class="stat appear st" style="--d:1.28s"><svg viewBox="0 0 24 24"><rect x="2.4" y="2.4" width="19.2" height="19.2" rx="6.2" fill="#fff"/><path d="M12 7.1v7.4M8.15 12.35L12 16.2l3.85-3.85" stroke="#111" stroke-width="1.85" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i="s2"></span></div>
+  <div class="stat appear st" style="--d:1.44s"><svg class="w" viewBox="0 0 40 22"><circle cx="10.2" cy="11" r="9.2" fill="#2b2b2b"/><ellipse cx="10.2" cy="12.1" rx="4.15" ry="3.7" fill="#f4f4f4"/><circle cx="20.2" cy="11" r="9.2" fill="#fff"/><circle cx="18" cy="10" r="1.7" fill="#111"/><circle cx="22.4" cy="10" r="1.7" fill="#111"/><circle cx="30.2" cy="11" r="9.2" fill="#f26b1d"/><text x="30.2" y="15.1" font-family="Inter" font-weight="700" font-size="12.5" text-anchor="middle" fill="#fff">e</text></svg><span data-i="s3"></span></div>
+ </footer>
+</div>
+
+<section id="analyze"><div class="rv"><p class="eyebrow" data-i="an_e"></p><h2 data-h="an_t"></h2><p class="sub" data-i="an_s"></p></div>
+ <div class="card rv"><div class="lk" id="lk"><span data-i="lk"></span><button class="chip" id="lkb" data-i="login"></button></div><textarea id="txt" maxlength="5000"></textarea>
+  <div class="row"><div class="ex"><span data-i="ex"></span><button class="chip" data-ex="1" data-i="ex1"></button><button class="chip" data-ex="2" data-i="ex2"></button><span id="cnt">0/5000</span></div><button class="btn btn-solid hb" id="go" data-i="go"></button></div>
+  <p class="err" id="err" role="alert"></p>
+  <div id="res"><div class="vhead"><div class="vb"><span class="dot"></span><span id="vl"></span></div><span class="small" id="pv"></span></div>
+   <div class="bar"><i id="bf"></i></div><p class="small" id="cf"></p><p style="margin-top:12px;line-height:1.55" id="sm"></p>
+   <div class="rg"><div><h4 data-i="r_why"></h4><ul id="rs"></ul></div><div><h4 data-i="r_sign"></h4><div class="tags" id="sg"></div><h4 style="margin-top:18px" data-i="r_adv"></h4><p class="small" style="color:#cfcfcf;line-height:1.55" id="ad"></p></div></div>
+   <h4 class="small" style="margin-top:18px" data-i="r_txt"></h4><div class="hl-text" id="ht"></div>
+   <div class="row"><button class="chip" id="cp" data-i="copy"></button></div></div>
+ </div></section>
+
+<section id="how"><div class="rv"><p class="eyebrow" data-i="h_e"></p><h2 data-h="h_t"></h2><p class="sub" data-i="h_s"></p></div>
+ <div class="steps"><div class="card rv"><div class="num">01</div><h3 data-i="st1"></h3><p data-i="st1d"></p></div><div class="card rv"><div class="num">02</div><h3 data-i="st2"></h3><p data-i="st2d"></p></div><div class="card rv"><div class="num">03</div><h3 data-i="st3"></h3><p data-i="st3d"></p></div></div></section>
+
+<section id="features"><div class="rv"><p class="eyebrow" data-i="f_e"></p><h2 data-h="f_t"></h2></div><div style="height:20px"></div>
+ <div class="feats"><div class="card rv"><h3 data-i="f1"></h3><p data-i="f1d"></p></div><div class="card rv"><h3 data-i="f2"></h3><p data-i="f2d"></p></div><div class="card rv"><h3 data-i="f3"></h3><p data-i="f3d"></p></div><div class="card rv"><h3 data-i="f4"></h3><p data-i="f4d"></p></div></div></section>
+
+<section id="tools"><div class="rv"><p class="eyebrow" data-i="tl_e"></p><h2 data-h="tl_t"></h2></div><div style="height:20px"></div>
+ <div class="feats"><a class="card rv" href="#/quiz"><h3 data-i="p1"></h3><p data-i="p1d"></p></a><a class="card rv" href="#/techniques"><h3 data-i="p2"></h3><p data-i="p2d"></p></a><a class="card rv" href="#/checklist"><h3 data-i="p3"></h3><p data-i="p3d"></p></a><a class="card rv" href="#/dashboard"><h3 data-i="p4"></h3><p data-i="p4d"></p></a></div></section>
+
+<section id="history"><div class="rv"><p class="eyebrow" data-i="hi_e"></p><h2 data-h="hi_t"></h2></div><div style="height:16px"></div>
+ <div class="card rv"><div class="sum"><div><b id="n0">0</b><span class="small" data-i="n_all"></span></div><div><b id="n1" style="color:var(--ok)">0</b><span class="small" data-i="v_reliable"></span></div><div><b id="n2" style="color:var(--warn)">0</b><span class="small" data-i="v_suspicious"></span></div><div><b id="n3" style="color:var(--bad)">0</b><span class="small" data-i="v_fake"></span></div></div>
+ <ul class="hist" id="hl"></ul><div class="row"><span class="small" id="he"></span><button class="chip" id="hc" data-i="clear"></button></div></div></section>
+
+<section id="faq"><div class="rv"><p class="eyebrow">FAQ</p><h2 data-h="q_t"></h2></div><div style="height:14px"></div>
+ <div class="rv"><details><summary data-i="q1"></summary><p data-i="q1a"></p></details><details><summary data-i="q2"></summary><p data-i="q2a"></p></details><details><summary data-i="q3"></summary><p data-i="q3a"></p></details><details><summary data-i="q4"></summary><p data-i="q4a"></p></details></div></section>
+</div><main id="view" hidden></main>
+<footer><span data-i="foot"></span></footer>
+
+<div class="md" id="md" hidden><div class="card mc"><button class="x" id="mx" aria-label="Close">×</button><div class="tabs"><button class="chip on" id="tl"></button><button class="chip" id="tr"></button></div>
+<input id="nm" autocomplete="name"><input id="em" type="email" placeholder="Email" autocomplete="email"><input id="pw" type="password" autocomplete="current-password"><p class="err" id="ae" role="alert"></p><button class="btn btn-solid hb" id="sub" style="width:100%"></button></div></div>
+<script>
+(()=>{
+document.documentElement.classList.add('js');
+const D={kk:{n5:'Құралдар',p1:'Фейкті тап',p1d:'Хабарламаны оқып, жалған не шын екенін болжаңыз.',p2:'Әдістер кітапханасы',p2d:'6 манипуляция әдісі: мысал және қарсы шара.',p3:'Тексеру чек-листі',p3d:'Ақпаратқа сену деңгейін есептейтін тізім.',p4:'Менің статистикам',p4d:'Тарих, диаграмма және CSV экспорты.',tl_e:'Қосымша беттер',tl_t:'Жаңа <em>құралдар</em>',login:'Кіру',reg:'Тіркелу',logout:'Шығу',nm:'Атыңыз',pw:'Құпиясөз (кемінде 6 таңба)',lk:'Талдау үшін аккаунтқа кіріңіз немесе тіркеліңіз.',n1:'Талдау',n2:'Қалай жұмыс істейді',n3:'Мүмкіндіктер',n4:'FAQ',cta:'Тексеруді бастау',badge:'Жасанды интеллектпен талдау',h1a:'Жалған ақпаратты <em>AI</em> арқылы',h1b:'секундтарда анықтаңыз.',lede:'Жаңалықты немесе хабарламаны енгізіңіз — жүйе манипуляция белгілерін тауып, сенімділік деңгейін түсіндіреді.',b1:'Тексеруді бастау',b2:'Қалай жұмыс істейді',s1:'3 деңгейлі вердикт: сенімді / күмәнді / жалған',s2:'Күдікті сөздерді мәтінде белгілейді',s3:'Қазақша және орысша',
+an_e:'Жасанды интеллект талдауы',an_t:'Мәтінді <em>тексеріңіз</em>',an_s:'Жаңалық, әлеуметтік желі жазбасы немесе хабарлама мәтінін төмендегі өріске қойыңыз (20–5000 таңба).',ph:'Мәтінді осында қойыңыз...',ex:'Мысал:',ex1:'Күдікті хабарлама',ex2:'Ресми жаңалық',go:'Тексеру',
+e1:'ШОК! Шұғыл таратыңыз! Дәрігерлер жасырып жатқан керемет рецепт кез келген ауруды бір түнде емдейді! Бұл құпия, 100% жұмыс істейді!!!',e2:'Қалалық әкімдік 12 қазанда жаңа жол жөндеу жұмыстары басталатынын хабарлады. Ресми дереккөз: әкімдіктің сайты.',
+v_reliable:'Сенімді',v_suspicious:'Күмәнді',v_fake:'Жалған',conf:'Сенімділік',r_why:'Себептері',r_sign:'Манипуляция белгілері',r_adv:'Кеңес',r_txt:'Күдікті сөздер белгіленген мәтін',copy:'Нәтижені көшіру',copied:'Көшірілді ✓',none:'Белгі табылмады',busy:'Талдануда...',
+h_e:'Жүйе жұмысы',h_t:'Үш қадамда <em>нәтиже</em>',h_s:'Қарапайым процесс: мәтін серверге түседі, ИИ талдайды, нәтиже түсіндірмемен қайтады.',st1:'Мәтін енгізу',st1d:'Тексерілетін мәтінді қойыңыз. Сервер оны тексеріп, лимиттен асырмай қабылдайды.',st2:'ИИ талдауы',st2d:'Gemini немесе Claude тілдік белгілерді, логиканы және дереккөздің болуын бағалайды.',st3:'Түсіндірілген вердикт',st3d:'Вердикт, сенімділік пайызы, себептер және күдікті сөздер бір экранда көрсетіледі.',
+f_e:'Мүмкіндіктер',f_t:'Жүйе не <em>істей алады</em>',f1:'ИИ талдау',f1d:'Gemini / Claude арқылы манипуляция, кликбейт, қастандық тілі белгілерін іздейді.',f2:'Демо-режим',f2d:'ИИ қолжетімсіз болса, ереже негізіндегі талдау автоматты қосылады — сайт тоқтамайды.',f3:'Мәтінді белгілеу',f3d:'Күдікті сөздер бастапқы мәтінде қызылмен бөлектеледі.',f4:'Тексеру тарихы',f4d:'Соңғы тексерулер браузерде сақталады, статистика көрсетіледі.',
+hi_e:'Тарих',hi_t:'Сіздің <em>тексерулеріңіз</em>',n_all:'Барлығы',clear:'Тарихты тазалау',empty:'Әзірге тексеру жоқ.',
+q_t:'Жиі қойылатын <em>сұрақтар</em>',q1:'Жүйе нәтижесі 100% дұрыс па?',q1a:'Жоқ. ИИ интернетте нақты фактіні тексермейді, тек мәтіннің тілі мен логикасын бағалайды. Маңызды ақпаратты әрқашан бастапқы дереккөзден тексеріңіз.',q2:'Менің мәтінім сақтала ма?',q2a:'Сервер мәтінді сақтамайды. Тарих тек өз браузеріңізде (localStorage). Gemini тегін деңгейінде Google деректі өз өнімдерін жақсарту үшін қолдануы мүмкін.',q3:'ИИ қосылмаса не болады?',q3a:'Жүйе автоматты түрде ереже негізіндегі демо-режимге ауысады және нәтижеде сол көрсетіледі.',q4:'Қандай белгілер күдік тудырады?',q4a:'Шұғылдыққа шақыру, сенсациялық тақырып, дереккөздің жоқтығы, «100%» сияқты абсолютті сөздер, керемет уәделер және қастандық тілі.',
+foot:'aqiqat.ai — оқу жобасы: «Жасанды интеллект көмегімен жалған ақпарат анықтау жүйесі». Нәтиже кеңес сипатында, түпкілікті шешім емес.'},
+ru:{n5:'Инструменты',p1:'Найди фейк',p1d:'Прочитайте сообщение и определите: ложь или правда.',p2:'Библиотека приёмов',p2d:'6 приёмов манипуляции: пример и противодействие.',p3:'Чек-лист проверки',p3d:'Список, который считает уровень доверия к информации.',p4:'Моя статистика',p4d:'История, диаграмма и экспорт в CSV.',tl_e:'Дополнительные страницы',tl_t:'Новые <em>инструменты</em>',login:'Войти',reg:'Регистрация',logout:'Выйти',nm:'Ваше имя',pw:'Пароль (минимум 6 символов)',lk:'Для анализа войдите в аккаунт или зарегистрируйтесь.',n1:'Анализ',n2:'Как это работает',n3:'Возможности',n4:'FAQ',cta:'Начать проверку',badge:'Анализ с помощью ИИ',h1a:'Находите фейки с помощью <em>AI</em>',h1b:'за считанные секунды.',lede:'Вставьте новость или сообщение — система найдёт признаки манипуляции и объяснит уровень доверия.',b1:'Начать проверку',b2:'Как это работает',s1:'Вердикт в 3 уровня: надёжно / сомнительно / ложь',s2:'Подсвечивает подозрительные фразы в тексте',s3:'Казахский и русский языки',
+an_e:'Анализ искусственным интеллектом',an_t:'<em>Проверьте</em> текст',an_s:'Вставьте текст новости, поста или сообщения в поле ниже (20–5000 символов).',ph:'Вставьте текст сюда...',ex:'Пример:',ex1:'Подозрительное сообщение',ex2:'Официальная новость',go:'Проверить',
+e1:'ШОК! Срочно перешлите всем! Врачи скрывают чудодейственный рецепт, который излечивает любую болезнь за одну ночь! Это тайно запрещено, 100% работает!!!',e2:'Городской акимат сообщил, что 12 октября начнутся новые дорожные работы. Официальный источник: сайт акимата.',
+v_reliable:'Надёжно',v_suspicious:'Сомнительно',v_fake:'Ложь',conf:'Уверенность',r_why:'Причины',r_sign:'Признаки манипуляции',r_adv:'Совет',r_txt:'Текст с подсвеченными фразами',copy:'Копировать результат',copied:'Скопировано ✓',none:'Признаков нет',busy:'Анализ...',
+h_e:'Как работает система',h_t:'Результат в <em>три шага</em>',h_s:'Простой процесс: текст уходит на сервер, ИИ анализирует, результат возвращается с объяснением.',st1:'Ввод текста',st1d:'Вставьте текст для проверки. Сервер валидирует его и ограничивает частоту запросов.',st2:'Анализ ИИ',st2d:'Gemini или Claude оценивают языковые признаки, логику и наличие источников.',st3:'Объяснённый вердикт',st3d:'Вердикт, процент уверенности, причины и подозрительные фразы на одном экране.',
+f_e:'Возможности',f_t:'Что умеет <em>система</em>',f1:'ИИ-анализ',f1d:'Через Gemini / Claude ищет манипуляции, кликбейт и язык теорий заговора.',f2:'Демо-режим',f2d:'Если ИИ недоступен, автоматически включается анализ по правилам — сайт не падает.',f3:'Подсветка текста',f3d:'Подозрительные фразы выделяются красным в исходном тексте.',f4:'История проверок',f4d:'Последние проверки хранятся в браузере, показывается статистика.',
+hi_e:'История',hi_t:'Ваши <em>проверки</em>',n_all:'Всего',clear:'Очистить историю',empty:'Проверок пока нет.',
+q_t:'Частые <em>вопросы</em>',q1:'Результат системы точен на 100%?',q1a:'Нет. ИИ не проверяет факты в интернете, а оценивает язык и логику текста. Важную информацию всегда сверяйте с первоисточником.',q2:'Сохраняется ли мой текст?',q2a:'Сервер текст не хранит. История только в вашем браузере (localStorage). В бесплатном тарифе Gemini Google может использовать данные для улучшения своих продуктов.',q3:'Что если ИИ недоступен?',q3a:'Система автоматически переключится на демо-режим по правилам и покажет это в результате.',q4:'Какие признаки вызывают подозрение?',q4a:'Призывы к срочности, сенсационные заголовки, отсутствие источников, абсолютные слова вроде «100%», чудо-обещания и язык заговоров.'  ,
+foot:'aqiqat.ai — учебный проект: «Система обнаружения ложной информации с помощью ИИ». Результат носит рекомендательный характер, а не окончательный вердикт.'}};
+const $=s=>document.querySelector(s);let lang=localStorage.getItem('lang')==='ru'?'ru':'kk';const t=k=>D[lang][k];
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function apply(){document.documentElement.lang=lang;document.querySelectorAll('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));document.querySelectorAll('[data-h]').forEach(e=>e.innerHTML=t(e.dataset.h));$('#txt').placeholder=t('ph');$('#lang').textContent=lang==='kk'?'RU':'KZ';$('#he').textContent=t('empty');ui();mu();renderHist();if(last)show(last.r,last.x);if(VIEW)VIEWS[VIEW][0]()}
+let last=null,user=null,amode='login';
+/* ---- analyze ---- */
+const txt=$('#txt'),go=$('#go'),err=$('#err');
+txt.addEventListener('input',()=>$('#cnt').textContent=txt.value.length+'/5000');
+document.querySelectorAll('[data-ex]').forEach(b=>b.onclick=()=>{txt.value=t('e'+b.dataset.ex);txt.dispatchEvent(new Event('input'))});
+function show(r,x){last={r,x};const R=$('#res');R.className='on '+r.verdict;R.style.setProperty('--c','');$('#vl').textContent=t('v_'+r.verdict);$('#pv').textContent='via '+r.provider+(r.fallback?' (fallback)':'');
+$('#cf').textContent=t('conf')+': '+r.confidence+'%';$('#bf').style.width='0';requestAnimationFrame(()=>requestAnimationFrame(()=>$('#bf').style.width=r.confidence+'%'));
+$('#sm').textContent=r.summary;$('#rs').innerHTML=r.reasons.length?r.reasons.map(a=>'<li>'+esc(a)+'</li>').join(''):'<li>'+t('none')+'</li>';
+$('#sg').innerHTML=r.signs.length?r.signs.map(a=>'<span class="tag">'+esc(a)+'</span>').join(''):'<span class="small">'+t('none')+'</span>';$('#ad').textContent=r.advice;
+let h=esc(x);r.phrases.forEach(p=>{h=h.split(esc(p)).join('<mark>'+esc(p)+'</mark>')});$('#ht').innerHTML=h;setNet(r.verdict)}
+async function run(){const x=txt.value.trim();err.className='err';if(!user){openM('login');return}
+if(x.length<20){err.textContent=lang==='ru'?'Текст слишком короткий (минимум 20 символов).':'Мәтін тым қысқа (кемінде 20 таңба).';err.className='err on';return}
+go.disabled=true;go.textContent=t('busy');setNet('busy');
+try{const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:x,lang})});const j=await r.json();if(r.status===401){user=null;ui();renderHist();openM('login')}if(!r.ok)throw new Error(j.error||'Error');show(j,x);save(j,x);$('#res').scrollIntoView({behavior:'smooth',block:'nearest'})}
+catch(e){setNet('idle');err.textContent=e.message==='Failed to fetch'?(lang==='ru'?'Сервер недоступен. Запустите: npm start':'Сервер қолжетімсіз. Іске қосыңыз: npm start'):e.message;err.className='err on'}
+finally{go.disabled=false;go.textContent=t('go')}}
+go.onclick=run;txt.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))run()});
+$('#cp').onclick=()=>{if(!last)return;const r=last.r;navigator.clipboard.writeText(`${t('v_'+r.verdict)} (${r.confidence}%)\n${r.summary}\n- ${r.reasons.join('\n- ')}\n${r.advice}`).then(()=>{$('#cp').textContent=t('copied');setTimeout(()=>$('#cp').textContent=t('copy'),1500)})};
+/* ---- history ---- */
+const KEY=()=>'tl_hist_'+(user?user.id:'x');const load=()=>{try{return user?JSON.parse(localStorage.getItem(KEY()))||[]:[]}catch(_){return[]}};
+function save(r,x){try{const a=load();a.unshift({d:Date.now(),v:r.verdict,c:r.confidence,x:x.slice(0,120)});localStorage.setItem(KEY(),JSON.stringify(a.slice(0,20)))}catch(_){}renderHist()}
+function renderHist(){const a=load();$('#n0').textContent=a.length;['reliable','suspicious','fake'].forEach((v,i)=>$('#n'+(i+1)).textContent=a.filter(e=>e.v===v).length);
+$('#hl').innerHTML=a.map(e=>`<li class="${e.v}"><span class="dot"></span><span class="t">${esc(e.x)}</span><span class="m">${t('v_'+e.v)} · ${e.c}% · ${new Date(e.d).toLocaleDateString(lang==='ru'?'ru-RU':'kk-KZ')}</span></li>`).join('');$('#he').style.display=a.length?'none':'';$('#hc').style.display=a.length?'':'none';if(VIEW==='dashboard')vDash()}
+$('#hc').onclick=()=>{try{localStorage.removeItem(KEY())}catch(_){}renderHist()};
+/* ---- auth ---- */
+const md=$('#md'),ae=$('#ae');
+function ui(){$('#who').style.display=user?'':'none';$('#who').textContent=user?user.name:'';$('#login').textContent=t(user?'logout':'login');$('#lk').style.display=user?'none':'flex'}
+function mu(){const r=amode==='reg';$('#nm').style.display=r?'':'none';$('#tl').classList.toggle('on',!r);$('#tr').classList.toggle('on',r);$('#tl').textContent=t('login');$('#tr').textContent=t('reg');$('#sub').textContent=t(r?'reg':'login');$('#nm').placeholder=t('nm');$('#pw').placeholder=t('pw');$('#pw').autocomplete=r?'new-password':'current-password'}
+function openM(m){amode=m;ae.className='err';md.hidden=false;mu();setTimeout(()=>$(m==='reg'?'#nm':'#em').focus(),30)}
+$('#tl').onclick=()=>{amode='login';ae.className='err';mu()};$('#tr').onclick=()=>{amode='reg';ae.className='err';mu()};
+$('#mx').onclick=()=>md.hidden=true;md.addEventListener('click',e=>{if(e.target===md)md.hidden=true});$('#lkb').onclick=()=>openM('login');
+$('#login').onclick=async()=>{if(!user)return openM('login');try{await fetch('/api/logout',{method:'POST',body:'{}'})}catch(_){}user=null;last=null;$('#res').className='';setNet('idle');ui();renderHist()};
+async function submit(){const s=$('#sub');s.disabled=true;ae.className='err';
+try{const r=await fetch('/api/'+(amode==='reg'?'register':'login'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lang,name:$('#nm').value,email:$('#em').value,password:$('#pw').value})});const j=await r.json();if(!r.ok)throw new Error(j.error);user=j.user;md.hidden=true;$('#pw').value='';ui();renderHist()}
+catch(e){ae.textContent=e.message==='Failed to fetch'?(lang==='ru'?'Сервер недоступен. Запустите: npm start':'Сервер қолжетімсіз. Іске қосыңыз: npm start'):e.message;ae.className='err on'}finally{s.disabled=false}}
+$('#sub').onclick=submit;$('#pw').addEventListener('keydown',e=>e.key==='Enter'&&submit());addEventListener('keydown',e=>e.key==='Escape'&&(md.hidden=true));
+fetch('/api/me').then(r=>r.ok?r.json():null).then(j=>{if(j){user=j.user;ui();renderHist()}}).catch(()=>{});
+/* ---- pages: content ---- */
+const C={kk:{u:{te:'Білім',tt:'Манипуляция <em>әдістері</em>',ts:'Жалған ақпаратта жиі қолданылатын 6 әдіс: белгісі, мысалы және қарсы шара.',sr:'Іздеу...',ex:'Мысал',ct:'Қалай тексеру',qe:'Ойын',qt:'Фейкті <em>тап</em>',qs:'Хабарламаны оқып, жалған не шын екенін таңдаңыз.',fk:'Жалған',rl:'Шын',nx:'Келесі',ag:'Қайта ойнау',sc:'Ұпай',ok:'Дұрыс! ',no:'Қате. ',ce:'Құрал',ctt:'Тексеру <em>чек-листі</em>',cs:'Бөліспес бұрын белгілерді қойыңыз — сенім деңгейі автоматты есептеледі.',de:'Профиль',dt:'Менің <em>статистикам</em>',ln:'Статистика үшін аккаунтқа кіріңіз.',av:'Орташа сенімділік',xp:'CSV жүктеу',nd:'Әзірге деректер жоқ — алдымен мәтін тексеріңіз.',tr:'Нәтиже',lv:['Төмен сенім — бөліспеңіз','Орташа сенім — қосымша тексеріңіз','Жоғары сенім — дереккөзбен бөлісуге болады'],qm:['Тағы жаттығыңыз','Жақсы!','Тамаша, сіз сақсыз!']},
+tech:[['Кликбейт','Сенсациялық тақырып мәтінмен сәйкес келмейді, назар аудару үшін ғана жазылады.','«Сенбейсіз! Мұны ешкім айтпайды!»','Тақырыпты емес, мәтінді толық оқыңыз, дәлелді іздеңіз.'],['Шұғылдық пен репост','Ойлануға уақыт бермей, тез таратуға итермелейді.','«Шұғыл! Барлығына жіберіңіз!»','Тоқтап, 5 минут тексеріңіз. Шын жаңалық күтуге болады.'],['Белгісіз дереккөз','Нақты автор мен сілтеме жоқ, «бір досым айтты» деп аталады.','«Анонимді дереккөз хабарлады...»','Бастапқы дереккөзді және автордың атын іздеңіз.'],['Эмоциялық қысым','Қорқыныш немесе ашу тудырып, сыни ойлауды өшіреді.','«Балаларыңыз қауіпте!!!»','Эмоция күшті болса — тексеруді күшейтіңіз.'],['Жалған сарапшы','«Ғалымдар дәлелдеді» дейді, бірақ кім екені көрсетілмейді.','«Дәрігерлер жасырып жатыр»','Сарапшының аты, мекемесі және зерттеу сілтемесін сұраңыз.'],['Контексттен тыс дерек','Ескі фото, кесілген дәйексөз немесе таңдамалы сан қолданылады.','Бұрынғы жылдың суреті жаңа оқиға ретінде','Суретті кері іздеумен (reverse image) және күні бойынша тексеріңіз.']],
+quiz:[['ШҰҒЫЛ! Барлық банк карталары бүгін түнде бұғатталады, хабарламаны 10 адамға жіберіңіз!',1,'Шұғылдық пен тізбекті таратуға шақыру — классикалық фейк белгісі.'],['Қалалық әкімдік 12 қазанда жол жөндеу басталатынын ресми сайтында хабарлады.',0,'Нақты күн және ресми дереккөз бар, тексеруге болады.'],['Бір түнде 10 келі арықтататын шай — дәрігерлер жасырып жатыр!',1,'Керемет уәде және «жасырып жатыр» қастандық тілі.'],['Университет ашық есік күнін 20 қарашада өткізеді, тіркелу — ресми сайтта.',0,'Нақты күн мен ресми арна көрсетілген.'],['Анонимді дереккөз: ертең барлық дүкендер жабылады, қор жинап алыңыз!',1,'Дереккөз белгісіз, үрей тудыруға бағытталған.'],['Метеоқызмет ертең қалада жаңбыр мен 8–12 м/с жел болатынын болжады.',0,'Нақты сандар мен ресми дереккөз бар.']],
+chk:['Нақты дереккөзге сілтеме бар','Автордың аты көрсетілген','Жарияланған күні жақын және нақты','Басқа сенімді басылымдар да жазған','Тақырып мәтінмен сәйкес келеді','Эмоциялық қысым және шұғылдық жоқ']},
+ru:{u:{te:'Знания',tt:'Приёмы <em>манипуляции</em>',ts:'6 приёмов, которые часто используют в ложной информации: признак, пример и противодействие.',sr:'Поиск...',ex:'Пример',ct:'Как проверить',qe:'Игра',qt:'Найди <em>фейк</em>',qs:'Прочитайте сообщение и выберите: ложь или правда.',fk:'Ложь',rl:'Правда',nx:'Дальше',ag:'Играть снова',sc:'Очки',ok:'Верно! ',no:'Неверно. ',ce:'Инструмент',ctt:'Чек-лист <em>проверки</em>',cs:'Отметьте признаки перед репостом — уровень доверия посчитается автоматически.',de:'Профиль',dt:'Моя <em>статистика</em>',ln:'Для статистики войдите в аккаунт.',av:'Средняя уверенность',xp:'Скачать CSV',nd:'Данных пока нет — сначала проверьте текст.',tr:'Результат',lv:['Низкое доверие — не делитесь','Среднее доверие — проверьте дополнительно','Высокое доверие — можно делиться с источником'],qm:['Потренируйтесь ещё','Хорошо!','Отлично, вы внимательны!']},
+tech:[['Кликбейт','Сенсационный заголовок не соответствует тексту и нужен лишь для внимания.','«Вы не поверите! Об этом молчат!»','Читайте текст целиком, ищите доказательства.'],['Срочность и репост','Не даёт времени подумать и толкает быстрее распространять.','«Срочно! Перешлите всем!»','Остановитесь и проверьте 5 минут. Настоящие новости подождут.'],['Неизвестный источник','Нет автора и ссылки, ссылаются на «знакомого».','«Анонимный источник сообщает...»','Найдите первоисточник и имя автора.'],['Эмоциональное давление','Вызывает страх или гнев и отключает критическое мышление.','«Ваши дети в опасности!!!»','Чем сильнее эмоция, тем тщательнее проверяйте.'],['Ложный эксперт','Пишет «учёные доказали», но не называет кто именно.','«Врачи это скрывают»','Запросите имя эксперта, организацию и ссылку на исследование.'],['Данные вне контекста','Старое фото, обрезанная цитата или выборочная цифра.','Снимок прошлого года как новое событие','Проверьте обратным поиском изображения и по дате.']],
+quiz:[['СРОЧНО! Все банковские карты сегодня ночью будут заблокированы, перешлите сообщение 10 людям!',1,'Срочность и призыв к цепочке репостов — классический признак фейка.'],['Городской акимат на официальном сайте сообщил, что 12 октября начнутся дорожные работы.',0,'Есть конкретная дата и официальный источник, можно проверить.'],['Чай, который за ночь убирает 10 кг, — врачи скрывают!',1,'Чудо-обещание и язык заговора «скрывают».'],['Университет проведёт день открытых дверей 20 ноября, регистрация — на официальном сайте.',0,'Указаны конкретная дата и официальный канал.'],['Анонимный источник: завтра закроются все магазины, запасайтесь!',1,'Источник неизвестен, цель — вызвать панику.'],['Метеослужба прогнозирует завтра в городе дождь и ветер 8–12 м/с.',0,'Есть конкретные цифры и официальный источник.']],
+chk:['Есть ссылка на конкретный источник','Указан автор','Дата публикации свежая и точная','Об этом пишут и другие надёжные издания','Заголовок соответствует тексту','Нет эмоционального давления и спешки']}};
+const c=()=>C[lang],V=()=>$('#view'),hd=(e,ti,s)=>`<p class="eyebrow">${e}</p><h2>${ti}</h2><p class="sub">${s}</p>`;
+/* ---- pages: views ---- */
+function vTech(){const x=c(),u=x.u;V().innerHTML=hd(u.te,u.tt,u.ts)+`<input class="srch" id="sq" placeholder="${u.sr}"><div class="feats" id="tg">`+x.tech.map(a=>`<div class="card" data-k="${esc((a[0]+a[1]+a[2]).toLowerCase())}"><h3>${a[0]}</h3><p>${a[1]}</p><div class="ex-b"><b>${u.ex}:</b> ${a[2]}</div><div class="ex-b" style="border-color:var(--ok)"><b>${u.ct}:</b> ${a[3]}</div></div>`).join('')+'</div>';
+$('#sq').oninput=e=>{const q=e.target.value.toLowerCase().trim();document.querySelectorAll('#tg .card').forEach(el=>el.style.display=el.dataset.k.includes(q)?'':'none')}}
+let Q={i:0,s:0};
+function vQuiz(){Q={i:0,s:0};qz()}
+function qz(){const x=c(),u=x.u,n=x.quiz.length,it=x.quiz[Q.i],H=hd(u.qe,u.qt,u.qs);
+if(!it){const m=u.qm[Q.s>=n-1?2:Q.s>=n/2?1:0];V().innerHTML=H+`<div class="card"><div class="num">${Q.s}/${n}</div><h3>${m}</h3><div style="margin-top:14px"><button class="btn btn-solid hb" id="qr">${u.ag}</button></div></div>`;$('#qr').onclick=vQuiz;setNet(Q.s>=n/2?'reliable':'suspicious');return}
+V().innerHTML=H+`<div class="card"><div class="small">${Q.i+1}/${n} · ${u.sc}: ${Q.s}</div><div class="bar" style="--c:#fff"><i style="width:${Q.i/n*100}%"></i></div><p style="font-size:19px;line-height:1.5;margin:14px 0">«${esc(it[0])}»</p><div class="acts" style="justify-content:flex-start;margin-top:0"><button class="btn btn-solid hb" data-a="1">${u.fk}</button><button class="btn btn-ghost hb" data-a="0">${u.rl}</button></div><div id="qf"></div></div>`;
+document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{if(Q.done)return;Q.done=1;const ok=+b.dataset.a===it[1];if(ok)Q.s++;$('#qf').innerHTML=`<p style="margin:16px 0 12px;line-height:1.55;color:${ok?'var(--ok)':'var(--bad)'}">${ok?u.ok:u.no}<span style="color:#cfcfcf">${it[2]}</span></p><button class="btn btn-solid hb" id="qn">${u.nx}</button>`;$('#qn').onclick=()=>{Q.i++;Q.done=0;qz()}})}
+function vChk(){const x=c(),u=x.u;V().innerHTML=hd(u.ce,u.ctt,u.cs)+`<div class="card">`+x.chk.map((q,i)=>`<label class="opt"><input type="checkbox" data-c="${i}"><span>${q}</span></label>`).join('')+`<div style="margin-top:18px"><div class="small">${u.tr}</div><div class="bar" id="cb" style="--c:var(--bad)"><i id="cf2"></i></div><p id="ct" style="font-size:17px;margin-top:6px"></p></div></div>`;
+const f=()=>{const k=document.querySelectorAll('[data-c]');let n=0;k.forEach(e=>n+=e.checked?1:0);const r=n/x.chk.length,l=r<.5?0:r<.84?1:2;$('#cb').style.setProperty('--c',['var(--bad)','var(--warn)','var(--ok)'][l]);$('#cf2').style.width=Math.round(r*100)+'%';$('#ct').textContent=Math.round(r*100)+'% · '+u.lv[l]};
+document.querySelectorAll('[data-c]').forEach(e=>e.onchange=f);f()}
+function vDash(){const x=c(),u=x.u,a=load(),H=hd(u.de,u.dt,'');
+if(!user){V().innerHTML=H+`<div class="card"><p style="margin-bottom:14px">${u.ln}</p><button class="btn btn-solid hb" id="dl">${t('login')}</button></div>`;$('#dl').onclick=()=>openM('login');return}
+if(!a.length){V().innerHTML=H+`<div class="card"><p>${u.nd}</p><div style="margin-top:14px"><a class="btn btn-solid hb" href="#analyze">${t('go')}</a></div></div>`;return}
+const cnt=v=>a.filter(e=>e.v===v).length,avg=Math.round(a.reduce((s,e)=>s+e.c,0)/a.length);
+V().innerHTML=H+`<div class="card"><div class="sum"><div><b>${a.length}</b><span class="small">${t('n_all')}</span></div><div><b>${avg}%</b><span class="small">${u.av}</span></div></div>`+['reliable','suspicious','fake'].map(v=>`<div class="small" style="margin-top:12px">${t('v_'+v)} — ${cnt(v)}</div><div class="bar" style="--c:var(--${v==='reliable'?'ok':v==='fake'?'bad':'warn'})"><i style="width:${cnt(v)/a.length*100}%"></i></div>`).join('')+`<ul class="hist" style="margin-top:18px">${a.map(e=>`<li class="${e.v}"><span class="dot"></span><span class="t">${esc(e.x)}</span><span class="m">${t('v_'+e.v)} · ${e.c}%</span></li>`).join('')}</ul><div class="row"><button class="chip" id="xp">${u.xp}</button><button class="chip" id="xc">${t('clear')}</button></div></div>`;
+requestAnimationFrame(()=>document.querySelectorAll('#view .bar i').forEach(i=>{const w=i.style.width;i.style.width='0';requestAnimationFrame(()=>i.style.width=w)}));
+$('#xp').onclick=()=>{const q=s=>'"'+String(s).replace(/"/g,'""')+'"',csv='\ufeffdate,verdict,confidence,text\n'+a.map(e=>[new Date(e.d).toISOString(),e.v,e.c,q(e.x)].join(',')).join('\n'),l=document.createElement('a');l.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));l.download='aqiqat-history.csv';l.click();setTimeout(()=>URL.revokeObjectURL(l.href),1500)};
+$('#xc').onclick=()=>{try{localStorage.removeItem(KEY())}catch(_){}renderHist();vDash()}}
+/* ---- router ---- */
+const VIEWS={quiz:[vQuiz,'p1'],techniques:[vTech,'p2'],checklist:[vChk,'p3'],dashboard:[vDash,'p4']},BASE=document.title;let VIEW=null;
+function route(){const h=location.hash,m=/^#\/(\w+)/.exec(h),v=m&&VIEWS[m[1]];$('#home').hidden=!!v;$('#view').hidden=!v;VIEW=v?m[1]:null;
+if(v){v[0]();document.title=t(v[1])+' — aqiqat.ai';scrollTo(0,0)}else{document.title=BASE;if(h.length>1&&h[1]!=='/'){requestAnimationFrame(()=>{const e=document.getElementById(h.slice(1));e&&e.scrollIntoView()})}else scrollTo(0,0)}
+setNet('idle');document.querySelectorAll('.ddi a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')===h));$('#dd').classList.remove('open')}
+addEventListener('hashchange',route);
+const dd=$('#ddb');dd.addEventListener('click',e=>{e.stopPropagation();const o=$('#dd').classList.toggle('open');dd.setAttribute('aria-expanded',o)});document.addEventListener('click',()=>$('#dd').classList.remove('open'));
+/* ---- ui ---- */
+$('#lang').onclick=()=>{lang=lang==='kk'?'ru':'kk';try{localStorage.setItem('lang',lang)}catch(_){}apply()};
+const bg=$('#bg'),close=()=>{document.body.classList.remove('menu-open');bg.setAttribute('aria-expanded','false');bg.setAttribute('aria-label','Open menu')};
+bg.onclick=()=>{const o=document.body.classList.toggle('menu-open');bg.setAttribute('aria-expanded',o);bg.setAttribute('aria-label',o?'Close menu':'Open menu')};
+document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',close));addEventListener('keydown',e=>e.key==='Escape'&&close());matchMedia('(min-width:901px)').addEventListener('change',e=>e.matches&&close());
+addEventListener('scroll',()=>$('#hd').classList.toggle('sc',scrollY>30),{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+setTimeout(()=>document.querySelectorAll('.rv').forEach(e=>e.getBoundingClientRect().top<innerHeight&&e.classList.add('in')),50);
+const hv=$('#hv');hv.addEventListener('error',()=>hv.parentNode.style.display='none',true);hv.play&&hv.play().catch(()=>{});
+/* ---- 3D network (canvas, no libs) ---- */
+const cv=$('#net'),g=cv.getContext('2d');let W,H,ang=0,mx=0,my=0,mode='idle',col=[255,255,255],tc=[255,255,255],spd=.0016,k=0;const P=[],E=[];const N=innerWidth<700?55:105;
+const COL={idle:[255,255,255],busy:[170,200,255],reliable:[74,222,128],suspicious:[250,204,21],fake:[248,113,113]};
+for(let i=0;i<N;i++){const u=Math.random()*2-1,a=Math.random()*6.2832,r=Math.sqrt(1-u*u);P.push([r*Math.cos(a),u,r*Math.sin(a)])}
+for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const d=Math.hypot(P[i][0]-P[j][0],P[i][1]-P[j][1],P[i][2]-P[j][2]);if(d<(N>80?.5:.65))E.push([i,j])}
+function setNet(m){mode=m;tc=COL[m]||COL.idle;spd=m==='busy'?.011:.0016}
+function size(){const d=Math.min(devicePixelRatio||1,2);W=cv.width=innerWidth*d;H=cv.height=innerHeight*d}size();addEventListener('resize',size);
+addEventListener('pointermove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5},{passive:true});
+function frame(){requestAnimationFrame(frame);if(document.hidden)return;k++;ang+=spd;for(let i=0;i<3;i++)col[i]+=(tc[i]-col[i])*.06;
+g.clearRect(0,0,W,H);const s=Math.min(W,H)*.52*(1+(mode==='busy'?.05*Math.sin(k*.12):0)),cy=Math.cos(ang),sy=Math.sin(ang),rx=my*.6,cx=Math.cos(rx),sx=Math.sin(rx),ox=W*.5+mx*W*.06,oy=H*.5;
+const Q=P.map(p=>{let x=p[0]*cy-p[2]*sy,z=p[0]*sy+p[2]*cy,y=p[1]*cx-z*sx;z=p[1]*sx+z*cx;const f=1/(2.6-z);return[ox+x*f*s*2.2,oy+y*f*s*2.2,z,f]});
+const c=col.map(Math.round).join(',');g.lineWidth=1;
+for(const[a,b]of E){const A=Q[a],B=Q[b],al=Math.max(0,(A[2]+B[2]+2)/4)*.55;g.strokeStyle=`rgba(${c},${al})`;g.beginPath();g.moveTo(A[0],A[1]);g.lineTo(B[0],B[1]);g.stroke()}
+for(const q of Q){g.fillStyle=`rgba(${c},${.35+(q[2]+1)*.3})`;g.beginPath();g.arc(q[0],q[1],(1.2+q[3]*1.6)*(W>1500?1.4:1),0,6.2832);g.fill()}}
+frame();
+apply();route();
+})();
+</script>
+</body></html>
